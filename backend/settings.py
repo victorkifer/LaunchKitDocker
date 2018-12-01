@@ -37,7 +37,7 @@ READONLY_S3_SECRET_ACCESS_KEY = ""
 
 # If you want email to work, configure an SMTP server here.
 
-EMAIL_SMTP_HOST = None # eg. "smtp.sendgrid.com"
+EMAIL_SMTP_HOST = None  # eg. "smtp.sendgrid.com"
 EMAIL_SMTP_USER = None
 EMAIL_SMTP_PASSWORD = None
 EMAIL_FROM_DOMAIN = "yoursite.com"
@@ -105,7 +105,7 @@ UNSUBSCRIBE_URL_SECRET = '00000000000000000000000000000000' # must be 32 hex cha
 BETA_LINK_SECRET = '00000000000000000000000000000000' # must be 32 hex chars
 UNSUB_SUB_NOTIFY_SECRET = '00000000000000000000000000000000' # must be 32 hex chars
 
-ENCRYPTED_ID_KEY_IV  = '0000000000000000' # must be 16 hex chars
+ENCRYPTED_ID_KEY_IV = '0000000000000000' # must be 16 hex chars
 
 COOKIE_SECRET_KEY = '00000000000000000000000000000000' # arbitrary secret
 
