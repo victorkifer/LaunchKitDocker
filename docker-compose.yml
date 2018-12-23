@@ -122,7 +122,7 @@ services:
       retries: 3
 
   postgres:
-    image: viktorkifer/postgres-hstore:1.0.0
+    image: viktorkifer/launchkit-postgres-hstore:1.0.0
     restart: unless-stopped
     ports:
       - 5432:5432

@@ -11,5 +11,5 @@ docker build -f docker/Dockerfile.backend -t viktorkifer/launchkit-app:${VERSION
 docker build -f docker/Dockerfile.gae -t viktorkifer/launchkit-gae:${VERSION} -m ${MEMORY_LIMIT} .
 docker build -f docker/Dockerfile.reviews -t viktorkifer/launchkit-reviews:${VERSION} -m ${MEMORY_LIMIT} .
 docker build -f docker/Dockerfile.skit -t viktorkifer/launchkit-skit:${VERSION} -m ${MEMORY_LIMIT} .
-docker build -f docker/Dockerfile.postgres -t viktorkifer/viktorkifer/postgres-hstore:${VERSION} -m ${MEMORY_LIMIT} .
+docker build -f docker/Dockerfile.postgres -t viktorkifer/launchkit-postgres-hstore:${VERSION} -m ${MEMORY_LIMIT} .
 docker rmi -f launchkit-base
