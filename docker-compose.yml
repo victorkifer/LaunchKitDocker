@@ -1,4 +1,8 @@
-version: '2.1'
+version: '2.2'
+
+networks:
+  lk-shared:
+    driver: local
 
 volumes:
   db-volume:
@@ -8,9 +12,7 @@ volumes:
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.backend
+    image: viktorkifer/launchkit-app:1.0.0
     restart: unless-stopped
     environment:
       PORT: 9101
@@ -19,8 +21,17 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       REDIS_URL: redis://redis:6379/0
-      SECRET_KEY: CYtDmKetk7QbsCWgSyLWIRo1V57mGXsP
+      SECRET_KEY: MySecretKey
       C_FORCE_ROOT: "true"
+      # these are optional
+      EMAIL_SMTP_HOST:
+      EMAIL_SMTP_USER:
+      EMAIL_SMTP_PASSWORD:
+      EMAIL_FROM_DOMAIN: yoursite.com
+      SLACK_CLIENT_ID:
+      SLACK_CLIENT_SECRET:
+    networks:
+      - lk-shared
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,12 +48,12 @@ services:
       retries: 6
 
   gae:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.gae
+    image: viktorkifer/launchkit-gae:1.0.0
     restart: unless-stopped
     environment:
       SERVER_SOFTWARE: Dev
+    networks:
+      - lk-shared
     volumes:
       - gae-storage:/usr/src/app/.dev_gae_storage
     ports:
@@ -55,9 +66,7 @@ services:
       retries: 6
 
   reviews:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.reviews
+    image: viktorkifer/launchkit-reviews:1.0.0
     restart: unless-stopped
     environment:
       PORT: 9101
@@ -66,7 +75,16 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       REDIS_URL: redis://redis:6379/0
-      SECRET_KEY: CYtDmKetk7QbsCWgSyLWIRo1V57mGXsP
+      SECRET_KEY: MySecretKey
+      # these are optional
+      EMAIL_SMTP_HOST:
+      EMAIL_SMTP_USER:
+      EMAIL_SMTP_PASSWORD:
+      EMAIL_FROM_DOMAIN: yoursite.com
+      SLACK_CLIENT_ID:
+      SLACK_CLIENT_SECRET:
+    networks:
+      - lk-shared
     depends_on:
       postgres:
         condition: service_healthy
@@ -74,9 +92,7 @@ services:
         condition: service_healthy
 
   skit:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.skit
+    image: viktorkifer/launchkit-skit:1.0.0
     restart: unless-stopped
     environment:
       API_HOST: http://backend:9101/
@@ -84,6 +100,8 @@ services:
       PORT: 9100
     depends_on:
       - backend
+    networks:
+      - lk-shared
     ports:
       - 9100:9100
     healthcheck:
@@ -95,6 +113,8 @@ services:
   redis:
     image: redis:4-alpine
     restart: unless-stopped
+    networks:
+      - lk-shared
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
@@ -102,10 +122,12 @@ services:
       retries: 3
 
   postgres:
-    image: aidanlister/postgres-hstore
+    image: viktorkifer/launchkit-postgres-hstore:1.0.0
     restart: unless-stopped
     ports:
       - 5432:5432
+    networks:
+      - lk-shared
     environment:
       POSTGRES_NAME: postgres
       POSTGRES_PASSWORD: postgres
